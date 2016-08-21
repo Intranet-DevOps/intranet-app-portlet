@@ -23,14 +23,14 @@
 	     <div class="box-header">
 	       <h3 class="box-title">My timesheet</h3>
 	 
-	 		
+	 		 
 	       <div class="box-tools" style="left: 150px">
 	       
-	       	 	Year <select style="width: 75px"> 
+	       	 	Year <select style="width: 75px" class="form-control select2"> 
 	           		<option>2015</option>
 	           		<option selected="selected">2016</option>
 	           </select>
-	           Month <select style="width: 120px"> 
+	           Month <select style="width: 120px" class="form-control select2"> 
 	           		<option>January</option>
 	           		<option>February</option>
 	           		<option>March</option>
@@ -44,7 +44,7 @@
 	           		<option>November</option>
 	           		<option>December</option>
 	           </select>
-	           Week <select> 
+	           Week <select class="form-control select2"> 
 	           		<option>1-July-2016 - 8-July-2016</option>
 	           		<option>9-July-2016 - 16-July-2016</option>
 	           		<option>17-July-2016 - 24-July-2016</option>
@@ -267,14 +267,14 @@
         <table>
         	<tr>
         		<td width="100px">Regular</td>
-        		<td><input/></td>
+        		<td><input style="height: 30px;"/></td>
         	</tr>
         	<tr>
         		<td colspan="2">&nbsp;</td>
         	</tr>
         	<tr>
         		<td>Overtime</td>
-        		<td><input/></td>
+        		<td><input style="height: 30px;" /></td>
         	</tr>
         </table>
       </div>
@@ -286,3 +286,16 @@
 
   </div>
 </div> 
+
+
+<script>  
+  $(function () {
+    //Initialize Select2 Elements
+    $(".select2").select2();
+
+    //Date picker
+    $('#datepicker').datepicker({
+      autoclose: true
+    });
+  });
+</script>
