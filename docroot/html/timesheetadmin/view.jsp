@@ -100,7 +100,7 @@
 	           <td>-</td>
 	           <td>4.00</td>
 	           <td>
-	           	<button type="button" class="btn btn-default btn-sm"><i class="fa fa-thumbs-o-up"></i></button>
+	           	  <button type="button" class="btn btn-default btn-sm"><i class="fa fa-thumbs-o-up"></i></button>
                   <button type="button" class="btn btn-default btn-sm"><i class="fa fa-thumbs-o-down"></i></button> 
                   <button type="button" class="btn btn-default" data-toggle="modal" data-target="#deleteConfirmation"><i class="fa fa-trash"></i></button>
 	           	<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editDialog"><i class="fa fa-edit"></i></button>
