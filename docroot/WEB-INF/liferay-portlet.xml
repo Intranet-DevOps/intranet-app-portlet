@@ -46,6 +46,50 @@
 		</footer-portlet-javascript>
 		<css-class-wrapper>my-leaves-portlet</css-class-wrapper>
 	</portlet>
+	<portlet>
+		<portlet-name>time-sheet-admin</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>
+			/css/timesheetadmin-main.css
+		</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/timesheetadmin-main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>time-sheet-admin-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>expenses-admin</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>
+			/css/expensesadmin-main.css
+		</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/expensesadmin-main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>expenses-admin-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>leaves-admin</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>
+			/css/leavesadmin-main.css
+		</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/leavesadmin-main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>leaves-admin-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>payroll-admin</portlet-name>
+		<icon>/icon.png</icon>
+		<header-portlet-css>
+			/css/payrolladmin-main.css
+		</header-portlet-css>
+		<footer-portlet-javascript>
+			/js/payrolladmin-main.js
+		</footer-portlet-javascript>
+		<css-class-wrapper>payroll-admin-portlet</css-class-wrapper>
+	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

@@ -8,5 +8,9 @@
 		<portlet id="my-payroll"></portlet>
 		<portlet id="my-expenses"></portlet>
 		<portlet id="my-leaves"></portlet>
+		<portlet id="time-sheet-admin"></portlet>
+		<portlet id="expenses-admin"></portlet>
+		<portlet id="leaves-admin"></portlet>
+		<portlet id="payroll-admin"></portlet>
 	</category>
 </display>
