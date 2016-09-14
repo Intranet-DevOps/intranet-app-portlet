@@ -1,4 +1,4 @@
-AUI().use('aui-module', 'array-extras', function(A){ 
+AUI().ready('aui-module', 'array-extras', function(A){ 
  
 	var userId = INTRANETLIB.getUserId() + '';
 	var fullName = INTRANETLIB.getFullName();
@@ -24,38 +24,101 @@ AUI().use('aui-module', 'array-extras', function(A){
 		}
     }
 	
-	$('#viewButton').on('click', function (e) { 
-		var userId = INTRANETLIB.getUserId();
-		var month = $('#months').val();
-		var year = $('#years').val();
-		var begin = INTRANETLIB.getBeginningOfMonthTimestamp(year, month);
-		var end = INTRANETLIB.getEndingOfMonthTimestamp(year, month);
-		
-		console.log("View timesheet, userId: " + userId + ", month: " + month + ", year: " + year);
-		MYTIMESHEET.view(begin, end, userId);
+	$('#editDialog').on('shown.bs.modal', function (e) {
+	 	console.log("editDialog on-show");
+	 	$('#regular').val(MYTIMESHEET.timesheet.regular);
+	 	$('#overtime').val(MYTIMESHEET.timesheet.overtime);
+	 	$('#sick').val(MYTIMESHEET.timesheet.sick);
+	 	$('#vacation').val(MYTIMESHEET.timesheet.vacation);
+	 	$('#holiday').val(MYTIMESHEET.timesheet.holiday);
+	 	$('#unpaid').val(MYTIMESHEET.timesheet.unpaid);
+	 	$('#other').val(MYTIMESHEET.timesheet.other); 
 	})
+
+	$('#viewButton').on('click', function (e) {   
+		MYTIMESHEET.view();
+	}) 
+	$('#viewButton').on('save', function (e) {   
+		MYTIMESHEET.save();
+	}) 
 	
+	MYTIMESHEET.view();
 });
+
 
 
 // ------------
 
 function MyTimeSheet() {
+	timesheetId = -1;
+	timesheets = [];
+	timesheet = {};
 }
 
 var MYTIMESHEET = new MyTimeSheet();
 
 MyTimeSheet.prototype.deleteRow = function(timesheetId) {
 	console.log("deleting " + timesheetId);
+	MYTIMESHEET.timesheetId = timesheetId;
 	$('#deleteConfirmation').modal('show');
+};
+
+MyTimeSheet.prototype.save = function() {
+	MYTIMESHEET.timesheet.regular = $('#regular').val();
+	MYTIMESHEET.timesheet.overtime = $('#overtime').val();
+	MYTIMESHEET.timesheet.sick = $('#sick').val();
+	MYTIMESHEET.timesheet.vacation = $('#vacation').val();
+	MYTIMESHEET.timesheet.holiday = $('#holiday').val();
+	MYTIMESHEET.timesheet.unpaid = $('#unpaid').val();
+	MYTIMESHEET.timesheet.other = $('#other').val();
+	Liferay.Service(
+	  '/intranet-app-services-portlet.timesheet/update-time-sheet',
+	  {
+	    timesheetId: MYTIMESHEET.timesheet.timesheetId,
+	    employeeScreenName: INTRANETLIB.getUserId(),
+	    regular: MYTIMESHEET.timesheet.regular,
+	    overtime: MYTIMESHEET.timesheet.overtime,
+	    sick: MYTIMESHEET.timesheet.sick,
+	    vacation: MYTIMESHEET.timesheet.vacation,
+	    holiday: MYTIMESHEET.timesheet.holiday,
+	    unpaid: MYTIMESHEET.timesheet.unpaid,
+	    other: MYTIMESHEET.timesheet.other,
+	    remarks: MYTIMESHEET.timesheet.remarks,
+	    status: MYTIMESHEET.timesheet.status,
+	    projectCode: 'TEST',
+	    actor: INTRANETLIB.getUserId()
+	  },
+	  function(obj) {
+	    console.log(obj);
+	  }
+	);
+	
+	$('#editDialog').modal('hide');
 };
 
 MyTimeSheet.prototype.editRow = function(timesheetId) {
 	console.log("editRow " + timesheetId);
+	MYTIMESHEET.timesheetId = timesheetId; 
+	var timesheets = MYTIMESHEET.timesheets;
+	timesheets.forEach(function(item) {
+		if (item.timesheetId == timesheetId) {
+			MYTIMESHEET.timesheet = item; 
+			return;
+		}
+	});
 	$('#editDialog').modal('show');
 };
 
-MyTimeSheet.prototype.view = function(begin, end, userId) {
+
+MyTimeSheet.prototype.view = function() {
+	
+	var userId = INTRANETLIB.getUserId();
+	var month = $('#months').val();
+	var year = $('#years').val();
+	var begin = INTRANETLIB.getBeginningOfMonthTimestamp(year, month);
+	var end = INTRANETLIB.getEndingOfMonthTimestamp(year, month); 
+	console.log("View timesheet, userId: " + userId + ", month: " + month + ", year: " + year);
+	
 	INTRANETLIB.showLoading();
 	Liferay.Service(
 	  '/intranet-app-services-portlet.timesheet/find-timesheets-by-user',
@@ -67,7 +130,9 @@ MyTimeSheet.prototype.view = function(begin, end, userId) {
 	  },
 	  function(obj) {  
 		  $("#dataTable > tbody > tr").remove();
+		  MYTIMESHEET.timesheets = [];
 		  obj.forEach(function(item) {
+			 MYTIMESHEET.timesheets.push(item);
 			 var logDate = INTRANETLIB.formatDisplayDate(item.logDate);
 			 var dayName = INTRANETLIB.getDayStringOfWeek(item.logDate);
 			 var total = item.regular + item.overtime + item.sick + item.vacation + item.holiday + item.unpaid + item.other;

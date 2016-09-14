@@ -129,19 +129,32 @@
         <table>
         	<tr>
         		<td width="100px">Regular</td>
-        		<td><input style="height: 30px;"/></td>
+        		<td width="125px"><input id="regular" style="height: 30px; width: 100px"/>&nbsp;&nbsp;</td>
+        		<td width="100px">Vacation</td>
+        		<td><input id="vacation" style="height: 30px; width: 100px"/></td>
         	</tr>
         	<tr>
         		<td colspan="2">&nbsp;</td>
         	</tr>
         	<tr>
         		<td>Overtime</td>
-        		<td><input style="height: 30px;" /></td>
+        		<td><input id="overtime" style="height: 30px; width: 100px" />&nbsp;&nbsp;</td>
+        		<td>Holiday</td>
+        		<td><input id="holiday" style="height: 30px; width: 100px"/></td>
+        	</tr>
+        	<tr>
+        		<td colspan="2">&nbsp;</td>
+        	</tr>
+        	<tr>
+        		<td>Sick</td>
+        		<td><input id="sick" style="height: 30px; width: 100px" />&nbsp;&nbsp;</td>
+        		<td>Unpaid Leave</td>
+        		<td><input id="unpaid" style="height: 30px; width: 100px"/></td>
         	</tr>
         </table>
       </div>
       <div class="modal-footer">
-      	<button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
+      	<button type="button" class="btn btn-default" id="save">Save</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
       </div>
     </div>
