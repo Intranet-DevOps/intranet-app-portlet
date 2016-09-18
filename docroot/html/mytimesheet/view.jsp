@@ -1,5 +1,6 @@
 <%@page import="java.util.Date"%>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@include file="/html/inc/commonlib.jsp"%>
 
 <portlet:defineObjects />
 
@@ -67,6 +68,8 @@
 	  </div>
 </div>
 
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#submitConfirmation"><i class="fa fa-send"></i> Submit</button>
+
 <!-- Modal -->
 <div id="deleteConfirmation" class="modal fade paraModal" style="bottom: auto; width: 600px" role="dialog">
   <div class="modal-dialog paraModalDialog" style="margin-top: 0px; margin-bottom: 0px;">
@@ -81,15 +84,13 @@
         <p>Are you sure you want to remove this timesheet entry?</p>
       </div>
       <div class="modal-footer">
-      	<button type="button" class="btn btn-default" data-dismiss="modal">Yes</button>
+      	<button type="button" class="btn btn-default" id="deleteConfirmationButton" data-dismiss="modal">Yes</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
       </div>
     </div>
 
   </div>
 </div>
-
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#submitConfirmation"><i class="fa fa-send"></i> Submit</button>
 
 <!-- Modal -->
 <div id="submitConfirmation" class="modal fade paraModal" style="bottom: auto; width: 600px" role="dialog">
@@ -151,10 +152,19 @@
         		<td>Unpaid Leave</td>
         		<td><input id="unpaid" style="height: 30px; width: 100px"/></td>
         	</tr>
+        	<tr>
+        		<td colspan="2">&nbsp;</td>
+        	</tr>
+        	<tr>
+        		<td>Other</td>
+        		<td><input id="other" style="height: 30px; width: 100px" />&nbsp;&nbsp;</td>
+        		<td>&nbsp;</td>
+        		<td>&nbsp;</td>
+        	</tr>
         </table>
       </div>
       <div class="modal-footer">
-      	<button type="button" class="btn btn-default" id="save">Save</button>
+      	<button type="button" class="btn btn-default" id="saveButton">Save</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
       </div>
     </div>

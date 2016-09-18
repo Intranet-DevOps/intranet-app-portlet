@@ -38,9 +38,13 @@ AUI().ready('aui-module', 'array-extras', function(A){
 	$('#viewButton').on('click', function (e) {   
 		MYTIMESHEET.view();
 	}) 
-	$('#viewButton').on('save', function (e) {   
-		MYTIMESHEET.save();
+	$('#saveButton').on('click', function (e) {   
+	 	MYTIMESHEET.saveTimesheet();
 	}) 
+	$('#deleteConfirmationButton').on('click', function (e) {   
+	 	MYTIMESHEET.deleteTimesheet();
+	}) 
+	
 	
 	MYTIMESHEET.view();
 });
@@ -63,37 +67,75 @@ MyTimeSheet.prototype.deleteRow = function(timesheetId) {
 	$('#deleteConfirmation').modal('show');
 };
 
-MyTimeSheet.prototype.save = function() {
-	MYTIMESHEET.timesheet.regular = $('#regular').val();
-	MYTIMESHEET.timesheet.overtime = $('#overtime').val();
-	MYTIMESHEET.timesheet.sick = $('#sick').val();
-	MYTIMESHEET.timesheet.vacation = $('#vacation').val();
-	MYTIMESHEET.timesheet.holiday = $('#holiday').val();
-	MYTIMESHEET.timesheet.unpaid = $('#unpaid').val();
-	MYTIMESHEET.timesheet.other = $('#other').val();
-	Liferay.Service(
-	  '/intranet-app-services-portlet.timesheet/update-time-sheet',
-	  {
-	    timesheetId: MYTIMESHEET.timesheet.timesheetId,
-	    employeeScreenName: INTRANETLIB.getUserId(),
-	    regular: MYTIMESHEET.timesheet.regular,
-	    overtime: MYTIMESHEET.timesheet.overtime,
-	    sick: MYTIMESHEET.timesheet.sick,
-	    vacation: MYTIMESHEET.timesheet.vacation,
-	    holiday: MYTIMESHEET.timesheet.holiday,
-	    unpaid: MYTIMESHEET.timesheet.unpaid,
-	    other: MYTIMESHEET.timesheet.other,
-	    remarks: MYTIMESHEET.timesheet.remarks,
-	    status: MYTIMESHEET.timesheet.status,
-	    projectCode: 'TEST',
-	    actor: INTRANETLIB.getUserId()
-	  },
-	  function(obj) {
-	    console.log(obj);
-	  }
-	);
+MyTimeSheet.prototype.deleteTimesheet = function() {
+	try {
+		
+		Liferay.Service(
+		  '/intranet-app-services-portlet.timesheet/delete-time-sheet',
+		  {
+		    timesheetId: MYTIMESHEET.timesheetId,
+		    actor: INTRANETLIB.getUserId()
+		  },
+		  function(obj) {
+		    console.log(obj);
+		    $('#deleteConfirmation').modal('hide');
+		    INTRANETLIB.showMessage("Delete Confirmation", "Your timesheet has been successfully removed");
+		    MYTIMESHEET.view();
+		  }
+		);
+		
+		
+	} catch (e) {
+		alert("Error - " + e);
+		MYTIMESHEET.view();
+	}
 	
-	$('#editDialog').modal('hide');
+	
+};
+
+
+MyTimeSheet.prototype.saveTimesheet = function() {
+	try {
+		MYTIMESHEET.timesheet.regular = parseInt($('#regular').val());
+		MYTIMESHEET.timesheet.overtime = parseInt($('#overtime').val());
+		MYTIMESHEET.timesheet.sick = parseInt($('#sick').val());
+		MYTIMESHEET.timesheet.vacation = parseInt($('#vacation').val());
+		MYTIMESHEET.timesheet.holiday = parseInt($('#holiday').val());
+		MYTIMESHEET.timesheet.unpaid = parseInt($('#unpaid').val());
+		MYTIMESHEET.timesheet.other = parseInt($('#other').val());
+		Liferay.Service(
+		  '/intranet-app-services-portlet.timesheet/update-time-sheet',
+		  {
+		    timesheetId: MYTIMESHEET.timesheet.timesheetId,
+		    employeeScreenName: INTRANETLIB.getUserId(),
+		    regular: MYTIMESHEET.timesheet.regular,
+		    overtime: MYTIMESHEET.timesheet.overtime,
+		    sick: MYTIMESHEET.timesheet.sick,
+		    vacation: MYTIMESHEET.timesheet.vacation,
+		    holiday: MYTIMESHEET.timesheet.holiday,
+		    unpaid: MYTIMESHEET.timesheet.unpaid,
+		    other: MYTIMESHEET.timesheet.other,
+		    remarks: MYTIMESHEET.timesheet.remarks,
+		    status: MYTIMESHEET.timesheet.status,
+		    projectCode: 'TEST',
+		    logDate: MYTIMESHEET.timesheet.logDate,
+		    actor: INTRANETLIB.getUserId()
+		  },
+		  function(obj) {
+		    console.log(obj);
+		    $('#editDialog').modal('hide');
+		    INTRANETLIB.showMessage("Update Confirmation", "Your timesheet has been successfully saved");
+		    MYTIMESHEET.view();
+		  }
+		);
+		
+		
+	} catch (e) {
+		alert("Error - " + e);
+		MYTIMESHEET.view();
+	}
+	
+	
 };
 
 MyTimeSheet.prototype.editRow = function(timesheetId) {

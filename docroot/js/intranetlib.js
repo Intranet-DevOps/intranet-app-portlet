@@ -104,6 +104,13 @@ IntranetLib.prototype.getFullName = function() {
 IntranetLib.prototype.showLoading = function() {
 	pleaseWaitDiv.modal();
 }
+
+IntranetLib.prototype.showMessage = function(title, message) {
+	$("#commonConfirmTitle").html(title);
+    $("#commonConfirmMessage").html(message);
+    $('#commonConfirm').modal('show');
+}
+
 IntranetLib.prototype.hideLoading = function() {
 	pleaseWaitDiv.modal('hide');
 }
@@ -111,4 +118,4 @@ var pleaseWaitDiv = $('<div class="modal hide" id="pleaseWaitDialog" data-backdr
 
 var INTRANETLIB = new IntranetLib();
 
-var INTRANETLIB = new IntranetLib();
+
