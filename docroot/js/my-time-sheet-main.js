@@ -89,8 +89,6 @@ MyTimeSheet.prototype.deleteTimesheet = function() {
 		alert("Error - " + e);
 		MYTIMESHEET.view();
 	}
-	
-	
 };
 
 
@@ -116,7 +114,7 @@ MyTimeSheet.prototype.saveTimesheet = function() {
 		    unpaid: MYTIMESHEET.timesheet.unpaid,
 		    other: MYTIMESHEET.timesheet.other,
 		    remarks: MYTIMESHEET.timesheet.remarks,
-		    status: MYTIMESHEET.timesheet.status,
+		    status: 'NEW',
 		    projectCode: 'TEST',
 		    logDate: MYTIMESHEET.timesheet.logDate,
 		    actor: INTRANETLIB.getUserId()
@@ -189,6 +187,7 @@ MyTimeSheet.prototype.view = function() {
 						"<td>" + item.unpaid + "</td>" +
 						"<td>" + item.other + "</td>" +
 						"<td>" + total + "</td>" +
+						"<td>" + item.status + "</td>" +
 						"<td>" +
 						'	<button type="button" class="btn btn-default" data-toggle="modal" onclick="MYTIMESHEET.deleteRow(\'' + item.timesheetId + '\')"><i class="fa fa-trash"></i></button>' +
 						'	<button type="button" class="btn btn-default" data-toggle="modal" onclick="MYTIMESHEET.editRow(\'' + item.timesheetId + '\')"><i class="fa fa-edit"></i></button>' +

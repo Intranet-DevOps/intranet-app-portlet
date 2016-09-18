@@ -49,9 +49,10 @@
 	           <th>Sick</th>
 	           <th>Vacation</th>
 	           <th>Holiday</th>
-	           <th>Unpaid Leave</th>
+	           <th>Unpaid</th>
 	           <th>Other</th>
 	           <th>Total</th>
+	           <th>Status</th>
 	           <th></th>
 	         </tr>
 	       	</thead>

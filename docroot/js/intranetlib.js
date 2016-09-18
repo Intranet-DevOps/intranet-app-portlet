@@ -10,6 +10,13 @@ IntranetLib.prototype.getYears = function() {
 	return years;
 }
 
+IntranetLib.prototype.getStaffs = function() {
+	var years = [];
+	years.push({'value':'fernando', 'label' : 'Fernando Karnagi' });
+	years.push({'value':'sherine', 'label' : 'Sherine Chng' });
+	return years;
+}
+
 IntranetLib.prototype.getMonths = function() {
 	var months = [];
 	months.push({'label':'January', 'value' : 0 });
