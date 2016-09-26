@@ -43,20 +43,14 @@ AUI().ready('aui-module', 'array-extras', function(A){
 	$('#viewButton').on('click', function (e) {   
 		TIMESHEETADMIN.view();
 	}) 
-	$('#saveButton').on('click', function (e) {   
-	 	TIMESHEETADMIN.saveTimesheet();
+	$('#saveButton').on('click', function (e) {
+		INTRANETLIB.showDialog('Submit Confirmation', 'Are you sure you want to save this timesheet?', function() {
+			console.log("save confirm...");
+			TIMESHEETADMIN.saveTimesheet();
+		}, function() {
+			console.log("save not confirm...");
+		});  
 	}) 
-	$('#deleteConfirmationButton').on('click', function (e) {   
-	 	TIMESHEETADMIN.deleteTimesheet();
-	}) 
-	$('#approveConfirmationButton').on('click', function (e) {   
-	 	TIMESHEETADMIN.approveTimesheet();
-	}) 
-	$('#returnConfirmationButton').on('click', function (e) {   
-	 	TIMESHEETADMIN.returnTimesheet();
-	}) 
-	
-	
 	TIMESHEETADMIN.view();
 });
 
@@ -75,18 +69,34 @@ var TIMESHEETADMIN = new TimesheetAdmin();
 TimesheetAdmin.prototype.deleteRow = function(timesheetId) {
 	console.log("deleting " + timesheetId);
 	TIMESHEETADMIN.timesheetId = timesheetId;
-	$('#deleteConfirmation').modal('show');
+	INTRANETLIB.showDialog('Delete Confirmation', 'Are you sure you want to remove this timesheet entry?', function() {
+		console.log("delete confirm...");
+		TIMESHEETADMIN.deleteTimesheet();
+	}, function() {
+		console.log("delete not confirm...");
+	});
 };
 
 TimesheetAdmin.prototype.approveRow = function(timesheetId) {
 	console.log("approving " + timesheetId);
 	TIMESHEETADMIN.timesheetId = timesheetId;
-	$('#approveConfirmation').modal('show');
+	INTRANETLIB.showDialog('Approve Confirmation', 'Are you sure you want to approve this timesheet entry?', function() {
+		console.log("approve confirm...");
+		TIMESHEETADMIN.approveTimesheet();
+	}, function() {
+		console.log("approve not confirm...");
+	});
 };
 
 TimesheetAdmin.prototype.returnRow = function(timesheetId) {
 	console.log("rejecting " + timesheetId);
 	TIMESHEETADMIN.timesheetId = timesheetId;
+	INTRANETLIB.showDialog('Return Confirmation', 'Are you sure you want to return this timesheet entry?', function() {
+		console.log("return confirm...");
+		TIMESHEETADMIN.returnTimesheet();
+	}, function() {
+		console.log("return not confirm...");
+	});
 	$('#returnConfirmation').modal('show');
 };
 
@@ -127,7 +137,7 @@ TimesheetAdmin.prototype.approveTimesheet = function() {
 		  function(obj) {
 		    console.log(obj);
 		    $('#deleteConfirmation').modal('hide');
-		    INTRANETLIB.showMessage("Delete Confirmation", "This timesheet has been successfully approved");
+		    INTRANETLIB.showMessage("Approve Confirmation", "This timesheet has been successfully approved");
 		    TIMESHEETADMIN.view();
 		  }
 		);
@@ -153,7 +163,7 @@ TimesheetAdmin.prototype.returnTimesheet = function() {
 		  function(obj) {
 		    console.log(obj);
 		    $('#deleteConfirmation').modal('hide');
-		    INTRANETLIB.showMessage("Delete Confirmation", "This timesheet has been successfully returned");
+		    INTRANETLIB.showMessage("Return Confirmation", "This timesheet has been successfully returned");
 		    TIMESHEETADMIN.view();
 		  }
 		);

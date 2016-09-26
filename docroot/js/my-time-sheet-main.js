@@ -24,8 +24,7 @@ AUI().ready('aui-module', 'array-extras', function(A){
 		}
     }
 	
-	$('#editDialog').on('shown.bs.modal', function (e) {
-	 	console.log("editDialog on-show");
+	$('#editDialog').on('shown.bs.modal', function (e) { 
 	 	$('#regular').val(MYTIMESHEET.timesheet.regular);
 	 	$('#overtime').val(MYTIMESHEET.timesheet.overtime);
 	 	$('#sick').val(MYTIMESHEET.timesheet.sick);
@@ -39,12 +38,13 @@ AUI().ready('aui-module', 'array-extras', function(A){
 		MYTIMESHEET.view();
 	}) 
 	$('#saveButton').on('click', function (e) {   
-	 	MYTIMESHEET.saveTimesheet();
+		INTRANETLIB.showDialog('Submit Confirmation', 'Are you sure you want to save this timesheet?', function() {
+			console.log("save confirm...");
+			MYTIMESHEET.saveTimesheet();
+		}, function() {
+			console.log("save not confirm...");
+		});  
 	}) 
-	$('#deleteConfirmationButton').on('click', function (e) {   
-	 	MYTIMESHEET.deleteTimesheet();
-	}) 
-	
 	
 	MYTIMESHEET.view();
 });
@@ -64,7 +64,12 @@ var MYTIMESHEET = new MyTimeSheet();
 MyTimeSheet.prototype.deleteRow = function(timesheetId) {
 	console.log("deleting " + timesheetId);
 	MYTIMESHEET.timesheetId = timesheetId;
-	$('#deleteConfirmation').modal('show');
+	INTRANETLIB.showDialog('Delete Confirmation', 'Are you sure you want to remove this timesheet entry?', function() {
+		console.log("delete confirm...");
+		MYTIMESHEET.deleteTimesheet();
+	}, function() {
+		console.log("delete not confirm...");
+	});
 };
 
 MyTimeSheet.prototype.deleteTimesheet = function() {
