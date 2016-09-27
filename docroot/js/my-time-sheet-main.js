@@ -47,6 +47,15 @@ AUI().ready('aui-module', 'array-extras', function(A){
 		});  
 	}) 
 	
+	$('#timeSaveButton').on('click', function (e) {   
+		INTRANETLIB.showDialog('Submit Confirmation', 'Are you sure you want to submit this time-clock?', function() {
+			console.log("save confirm...");
+			MYTIMESHEET.saveTimeClock();
+		}, function() {
+			console.log("save not confirm...");
+		});  
+	}) 
+	
 	$('#deleteButton').on('click', function (e) {   
 		MYTIMESHEET.deleteRow();
 	})  
@@ -145,6 +154,41 @@ MyTimeSheet.prototype.saveTimesheet = function() {
 		MYTIMESHEET.view();
 	}
 };
+
+
+MyTimeSheet.prototype.saveTimeClock = function() {
+	try {
+		var clockInTime = $('#startTime').val();
+		var clockOutTime = $('#finishTime').val();
+		var type = $('#timeType').val();
+		var remarks = $('#timeRemarks').val();
+		Liferay.Service(
+		  '/intranet-app-services-portlet.timesheet/add-timesheet-details',
+		  {
+		    timesheetId: MYTIMESHEET.timesheet.timesheetId,
+		    logDate: MYTIMESHEET.timesheet.logDate,
+		    clockInTime: clockInTime,
+		    clockOutTime: clockOutTime,
+		    type: type,
+		    remarks: remarks,
+		    actor: INTRANETLIB.getUserId()
+		  },
+		  function(obj) {
+		    console.log(obj);
+		    $('#editDialog').modal('hide');
+		    $('#addTimeDialog').modal('hide');
+		    INTRANETLIB.showMessage("Update Confirmation", "Your time-clock has been successfully saved");
+		    MYTIMESHEET.view();
+		  }
+		);
+		
+		
+	} catch (e) {
+		alert("Error - " + e);
+		MYTIMESHEET.view();
+	}
+};
+
 
 MyTimeSheet.prototype.editRow = function(timesheetId) {
 	console.log("editRow " + timesheetId);

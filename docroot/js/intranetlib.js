@@ -101,7 +101,7 @@ IntranetLib.prototype.getCurrentMonth = function() {
 } 
 
 IntranetLib.prototype.getUserId= function() {
-	return Liferay.ThemeDisplay.getUserId();
+	return INTRANET_USERID;
 }
 
 IntranetLib.prototype.getFullName = function() {
