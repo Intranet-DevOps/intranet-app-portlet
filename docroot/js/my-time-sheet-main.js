@@ -32,6 +32,7 @@ AUI().ready('aui-module', 'array-extras', function(A){
 	 	$('#holiday').val(MYTIMESHEET.timesheet.holiday);
 	 	$('#unpaid').val(MYTIMESHEET.timesheet.unpaid);
 	 	$('#other').val(MYTIMESHEET.timesheet.other); 
+	 	$('#remarks').val(MYTIMESHEET.timesheet.remarks);
 	})
 
 	$('#viewButton').on('click', function (e) {   
@@ -45,6 +46,10 @@ AUI().ready('aui-module', 'array-extras', function(A){
 			console.log("save not confirm...");
 		});  
 	}) 
+	
+	$('#deleteButton').on('click', function (e) {   
+		MYTIMESHEET.deleteRow();
+	})  
 	
 	MYTIMESHEET.view();
 });
@@ -61,9 +66,9 @@ function MyTimeSheet() {
 
 var MYTIMESHEET = new MyTimeSheet();
 
-MyTimeSheet.prototype.deleteRow = function(timesheetId) {
-	console.log("deleting " + timesheetId);
-	MYTIMESHEET.timesheetId = timesheetId;
+MyTimeSheet.prototype.deleteRow = function() {
+	console.log("deleting " + MYTIMESHEET.timesheetId);
+	//MYTIMESHEET.timesheetId = timesheetId;
 	INTRANETLIB.showDialog('Delete Confirmation', 'Are you sure you want to remove this timesheet entry?', function() {
 		console.log("delete confirm...");
 		MYTIMESHEET.deleteTimesheet();
@@ -84,6 +89,7 @@ MyTimeSheet.prototype.deleteTimesheet = function() {
 		  function(obj) {
 		    console.log(obj);
 		    $('#deleteConfirmation').modal('hide');
+		    $('#editDialog').modal('hide');
 		    INTRANETLIB.showMessage("Delete Confirmation", "Your timesheet has been successfully removed");
 		    MYTIMESHEET.view();
 		  }
@@ -106,6 +112,7 @@ MyTimeSheet.prototype.saveTimesheet = function() {
 		MYTIMESHEET.timesheet.holiday = parseInt($('#holiday').val());
 		MYTIMESHEET.timesheet.unpaid = parseInt($('#unpaid').val());
 		MYTIMESHEET.timesheet.other = parseInt($('#other').val());
+		MYTIMESHEET.timesheet.remarks = $('#remarks').val();
 		Liferay.Service(
 		  '/intranet-app-services-portlet.timesheet/update-time-sheet',
 		  {
@@ -137,8 +144,6 @@ MyTimeSheet.prototype.saveTimesheet = function() {
 		alert("Error - " + e);
 		MYTIMESHEET.view();
 	}
-	
-	
 };
 
 MyTimeSheet.prototype.editRow = function(timesheetId) {
@@ -154,6 +159,18 @@ MyTimeSheet.prototype.editRow = function(timesheetId) {
 	$('#editDialog').modal('show');
 };
 
+MyTimeSheet.prototype.addTime = function(timesheetId) {
+	console.log("addTime " + timesheetId);
+	MYTIMESHEET.timesheetId = timesheetId; 
+	var timesheets = MYTIMESHEET.timesheets;
+	timesheets.forEach(function(item) {
+		if (item.timesheetId == timesheetId) {
+			MYTIMESHEET.timesheet = item; 
+			return;
+		}
+	});
+	$('#addTimeDialog').modal('show');
+};
 
 MyTimeSheet.prototype.view = function() {
 	
@@ -194,8 +211,9 @@ MyTimeSheet.prototype.view = function() {
 						"<td>" + total + "</td>" +
 						"<td>" + item.status + "</td>" +
 						"<td>" +
-						'	<button type="button" class="btn btn-default" data-toggle="modal" onclick="MYTIMESHEET.deleteRow(\'' + item.timesheetId + '\')"><i class="fa fa-trash"></i></button>' +
+						'	<button type="button" class="btn btn-default" style="display: none;" data-toggle="modal" onclick="MYTIMESHEET.deleteRow(\'' + item.timesheetId + '\')"><i class="fa fa-trash"></i></button>' +
 						'	<button type="button" class="btn btn-default" data-toggle="modal" onclick="MYTIMESHEET.editRow(\'' + item.timesheetId + '\')"><i class="fa fa-edit"></i></button>' +
+						'	<button type="button" class="btn btn-default" data-toggle="modal" onclick="MYTIMESHEET.addTime(\'' + item.timesheetId + '\')"><i class="fa fa-hourglass-half"></i></button>' +
 						"</td>" +
 						"</tr>");
 			$("#dataTable > tbody").append(row);

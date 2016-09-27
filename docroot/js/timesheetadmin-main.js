@@ -38,6 +38,7 @@ AUI().ready('aui-module', 'array-extras', function(A){
 	 	$('#holiday').val(TIMESHEETADMIN.timesheet.holiday);
 	 	$('#unpaid').val(TIMESHEETADMIN.timesheet.unpaid);
 	 	$('#other').val(TIMESHEETADMIN.timesheet.other); 
+	 	$('#remarks').val(TIMESHEETADMIN.timesheet.remarks); 
 	})
 
 	$('#viewButton').on('click', function (e) {   
@@ -50,6 +51,18 @@ AUI().ready('aui-module', 'array-extras', function(A){
 		}, function() {
 			console.log("save not confirm...");
 		});  
+	}) 
+	
+	$('#approveButton').on('click', function (e) {
+		TIMESHEETADMIN.approveRow();
+	}) 
+	
+	$('#returnButton').on('click', function (e) {
+		TIMESHEETADMIN.returnRow();
+	}) 
+	
+	$('#deleteButton').on('click', function (e) {
+		TIMESHEETADMIN.deleteRow();
 	}) 
 	TIMESHEETADMIN.view();
 });
@@ -66,9 +79,8 @@ function TimesheetAdmin() {
 
 var TIMESHEETADMIN = new TimesheetAdmin();
 
-TimesheetAdmin.prototype.deleteRow = function(timesheetId) {
-	console.log("deleting " + timesheetId);
-	TIMESHEETADMIN.timesheetId = timesheetId;
+TimesheetAdmin.prototype.deleteRow = function() {
+	console.log("deleting " + TIMESHEETADMIN.timesheetId); 
 	INTRANETLIB.showDialog('Delete Confirmation', 'Are you sure you want to remove this timesheet entry?', function() {
 		console.log("delete confirm...");
 		TIMESHEETADMIN.deleteTimesheet();
@@ -78,8 +90,7 @@ TimesheetAdmin.prototype.deleteRow = function(timesheetId) {
 };
 
 TimesheetAdmin.prototype.approveRow = function(timesheetId) {
-	console.log("approving " + timesheetId);
-	TIMESHEETADMIN.timesheetId = timesheetId;
+	console.log("approving " + TIMESHEETADMIN.timesheetId); 
 	INTRANETLIB.showDialog('Approve Confirmation', 'Are you sure you want to approve this timesheet entry?', function() {
 		console.log("approve confirm...");
 		TIMESHEETADMIN.approveTimesheet();
@@ -89,8 +100,7 @@ TimesheetAdmin.prototype.approveRow = function(timesheetId) {
 };
 
 TimesheetAdmin.prototype.returnRow = function(timesheetId) {
-	console.log("rejecting " + timesheetId);
-	TIMESHEETADMIN.timesheetId = timesheetId;
+	console.log("rejecting " + TIMESHEETADMIN.timesheetId);
 	INTRANETLIB.showDialog('Return Confirmation', 'Are you sure you want to return this timesheet entry?', function() {
 		console.log("return confirm...");
 		TIMESHEETADMIN.returnTimesheet();
@@ -112,6 +122,7 @@ TimesheetAdmin.prototype.deleteTimesheet = function() {
 		  function(obj) {
 		    console.log(obj);
 		    $('#deleteConfirmation').modal('hide');
+		    $('#editDialog').modal('hide');
 		    INTRANETLIB.showMessage("Delete Confirmation", "This timesheet has been successfully removed");
 		    TIMESHEETADMIN.view();
 		  }
@@ -137,6 +148,7 @@ TimesheetAdmin.prototype.approveTimesheet = function() {
 		  function(obj) {
 		    console.log(obj);
 		    $('#deleteConfirmation').modal('hide');
+		    $('#editDialog').modal('hide');
 		    INTRANETLIB.showMessage("Approve Confirmation", "This timesheet has been successfully approved");
 		    TIMESHEETADMIN.view();
 		  }
@@ -163,6 +175,7 @@ TimesheetAdmin.prototype.returnTimesheet = function() {
 		  function(obj) {
 		    console.log(obj);
 		    $('#deleteConfirmation').modal('hide');
+		    $('#editDialog').modal('hide');
 		    INTRANETLIB.showMessage("Return Confirmation", "This timesheet has been successfully returned");
 		    TIMESHEETADMIN.view();
 		  }
@@ -185,6 +198,7 @@ TimesheetAdmin.prototype.saveTimesheet = function() {
 		TIMESHEETADMIN.timesheet.holiday = parseInt($('#holiday').val());
 		TIMESHEETADMIN.timesheet.unpaid = parseInt($('#unpaid').val());
 		TIMESHEETADMIN.timesheet.other = parseInt($('#other').val());
+		TIMESHEETADMIN.timesheet.remarks = $('#remarks').val();
 		Liferay.Service(
 		  '/intranet-app-services-portlet.timesheet/update-time-sheet',
 		  {
@@ -275,10 +289,8 @@ TimesheetAdmin.prototype.view = function() {
 						"<td>" + total + "</td>" +
 						"<td>" + item.status + "</td>" +
 						"<td>" +  
-						'	<button type="button" class="btn btn-default" data-toggle="modal" onclick="TIMESHEETADMIN.approveRow(\'' + item.timesheetId + '\')"><i class="fa fa-thumbs-o-up"></i></button>' +
-						'	<button type="button" class="btn btn-default" data-toggle="modal" onclick="TIMESHEETADMIN.returnRow(\'' + item.timesheetId + '\')"><i class="fa fa-thumbs-o-down"></i></button>' +
-						'	<button type="button" class="btn btn-default" data-toggle="modal" onclick="TIMESHEETADMIN.deleteRow(\'' + item.timesheetId + '\')"><i class="fa fa-trash"></i></button>' +
 						'	<button type="button" class="btn btn-default" data-toggle="modal" onclick="TIMESHEETADMIN.editRow(\'' + item.timesheetId + '\')"><i class="fa fa-edit"></i></button>' +
+						'	<button type="button" class="btn btn-default" data-toggle="modal" onclick="TIMESHEETADMIN.viewTime(\'' + item.timesheetId + '\')"><i class="fa fa-hourglass-half"></i></button>' +
 						"</td>" +
 						"</tr>");
 			$("#dataTable > tbody").append(row);

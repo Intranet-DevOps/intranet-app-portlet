@@ -105,7 +105,7 @@
         		<td><input id="vacation" style="height: 30px; width: 100px"/></td>
         	</tr>
         	<tr>
-        		<td colspan="2">&nbsp;</td>
+        		<td colspan="4">&nbsp;</td>
         	</tr>
         	<tr>
         		<td>Overtime</td>
@@ -114,7 +114,7 @@
         		<td><input id="holiday" style="height: 30px; width: 100px"/></td>
         	</tr>
         	<tr>
-        		<td colspan="2">&nbsp;</td>
+        		<td colspan="4">&nbsp;</td>
         	</tr>
         	<tr>
         		<td>Sick</td>
@@ -123,7 +123,7 @@
         		<td><input id="unpaid" style="height: 30px; width: 100px"/></td>
         	</tr>
         	<tr>
-        		<td colspan="2">&nbsp;</td>
+        		<td colspan="4">&nbsp;</td>
         	</tr>
         	<tr>
         		<td>Other</td>
@@ -131,10 +131,22 @@
         		<td>&nbsp;</td>
         		<td>&nbsp;</td>
         	</tr>
+        	<tr>
+        		<td colspan="4">&nbsp;</td>
+        	</tr>
+        	<tr>
+        		<td colspan="4">Remarks</td>
+        	</tr>
+        	<tr>
+        		<td colspan="4"><textarea id="remarks" style="width: 450px" rows="2" cols="300"></textarea></td>
+        	</tr>
         </table>
       </div>
       <div class="modal-footer">
       	<button type="button" class="btn btn-default" id="saveButton">Save</button>
+      	<button type="button" class="btn btn-default" id="approveButton">Approve</button>
+      	<button type="button" class="btn btn-default" id="returnButton">Return</button>
+      	<button type="button" class="btn btn-default" id="deleteButton">Delete</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
       </div>
     </div>

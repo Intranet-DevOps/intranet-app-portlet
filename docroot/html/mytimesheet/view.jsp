@@ -71,7 +71,7 @@
 
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#submitConfirmation"><i class="fa fa-send"></i> Submit</button>
 
-<!-- Modal -->
+<!-- Edit Timesheet Modal -->
 <div id="editDialog" class="modal fade paraModal" style="bottom: auto; width: 600px" role="dialog">
   <div class="modal-dialog paraModalDialog" style="margin-top: 0px; margin-bottom: 0px;">
 
@@ -91,7 +91,7 @@
         		<td><input id="vacation" style="height: 30px; width: 100px"/></td>
         	</tr>
         	<tr>
-        		<td colspan="2">&nbsp;</td>
+        		<td colspan="4">&nbsp;</td>
         	</tr>
         	<tr>
         		<td>Overtime</td>
@@ -100,7 +100,7 @@
         		<td><input id="holiday" style="height: 30px; width: 100px"/></td>
         	</tr>
         	<tr>
-        		<td colspan="2">&nbsp;</td>
+        		<td colspan="4">&nbsp;</td>
         	</tr>
         	<tr>
         		<td>Sick</td>
@@ -117,10 +117,75 @@
         		<td>&nbsp;</td>
         		<td>&nbsp;</td>
         	</tr>
+        	<tr>
+        		<td colspan="4">&nbsp;</td>
+        	</tr>
+        	<tr>
+        		<td colspan="4">Remarks</td>
+        	</tr>
+        	<tr>
+        		<td colspan="4"><textarea id="remarks" style="width: 450px" rows="2" cols="300"></textarea></td>
+        	</tr>
         </table>
       </div>
       <div class="modal-footer">
       	<button type="button" class="btn btn-default" id="saveButton">Save</button>
+      	<button type="button" class="btn btn-default" id="deleteButton">Delete</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+</div> 
+ 
+ 
+ 
+ 
+<!-- Add Time Modal -->
+<div id="addTimeDialog" class="modal fade paraModal" style="bottom: auto; width: 600px" role="dialog">
+  <div class="modal-dialog paraModalDialog" style="margin-top: 0px; margin-bottom: 0px;">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Clock Time</h4>
+      </div>
+      <div class="modal-body">
+      	<b>Please clock your time below<br/><br/></b>
+        <table>
+        	<tr>
+        		<td width="100px" colspan="1">Category</td>
+        		<td width="375px" colspan="3">
+        			<select id="timeType">
+        				<option value="Regular" selected="selected">Regular</option>
+        				<option value="Overtime">Overtime</option>
+        				<option value="Other">Other</option>
+        			</select>
+        		</td> 
+        	</tr>
+        	<tr>
+        		<td colspan="4">&nbsp;</td>
+        	</tr>
+        	<tr>
+        		<td>Start Time</td>
+        		<td><input id="startTime" style="height: 30px; width: 100px" />&nbsp;&nbsp;</td>
+        		<td>Finish Time</td>
+        		<td><input id="finishTime" style="height: 30px; width: 100px"/></td>
+        	</tr>
+        	<tr>
+        		<td colspan="4">&nbsp;</td>
+        	</tr>
+        	<tr>
+        		<td colspan="4">Remarks</td>
+        	</tr>
+        	<tr>
+        		<td colspan="4"><textarea id="timeRemarks" style="width: 450px" rows="2" cols="300"></textarea></td>
+        	</tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+      	<button type="button" class="btn btn-default" id="timeSaveButton">Save</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
       </div>
     </div>
