@@ -86,34 +86,34 @@
         <table>
         	<tr>
         		<td width="100px">Regular</td>
-        		<td width="125px"><input id="regular" style="height: 30px; width: 100px"/>&nbsp;&nbsp;</td>
+        		<td width="125px"><input id="regular" readonly="readonly" style="height: 30px; width: 100px"/>&nbsp;&nbsp;</td>
         		<td width="100px">Vacation</td>
-        		<td><input id="vacation" style="height: 30px; width: 100px"/></td>
+        		<td><input id="vacation" readonly="readonly" style="height: 30px; width: 100px"/></td>
         	</tr>
         	<tr>
         		<td colspan="4">&nbsp;</td>
         	</tr>
         	<tr>
         		<td>Overtime</td>
-        		<td><input id="overtime" style="height: 30px; width: 100px" />&nbsp;&nbsp;</td>
+        		<td><input id="overtime" readonly="readonly" style="height: 30px; width: 100px" />&nbsp;&nbsp;</td>
         		<td>Holiday</td>
-        		<td><input id="holiday" style="height: 30px; width: 100px"/></td>
+        		<td><input id="holiday" readonly="readonly" style="height: 30px; width: 100px"/></td>
         	</tr>
         	<tr>
         		<td colspan="4">&nbsp;</td>
         	</tr>
         	<tr>
         		<td>Sick</td>
-        		<td><input id="sick" style="height: 30px; width: 100px" />&nbsp;&nbsp;</td>
+        		<td><input id="sick" readonly="readonly" style="height: 30px; width: 100px" />&nbsp;&nbsp;</td>
         		<td>Unpaid Leave</td>
-        		<td><input id="unpaid" style="height: 30px; width: 100px"/></td>
+        		<td><input id="unpaid" readonly="readonly" style="height: 30px; width: 100px"/></td>
         	</tr>
         	<tr>
         		<td colspan="2">&nbsp;</td>
         	</tr>
         	<tr>
         		<td>Other</td>
-        		<td><input id="other" style="height: 30px; width: 100px" />&nbsp;&nbsp;</td>
+        		<td><input id="other" readonly="readonly" style="height: 30px; width: 100px" />&nbsp;&nbsp;</td>
         		<td>&nbsp;</td>
         		<td>&nbsp;</td>
         	</tr>
@@ -129,9 +129,9 @@
         </table>
       </div>
       <div class="modal-footer">
-      	<button type="button" class="btn btn-default" id="saveButton">Save</button>
-      	<button type="button" class="btn btn-default" id="deleteButton">Delete</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      	<button type="button" class="btn btn-default" onclick="MYTIMESHEET.saveButton()"  id="saveButton">Update Remarks</button>
+      	<button type="button" class="btn btn-default" onclick="MYTIMESHEET.deleteButton()" id="deleteButton">Reset Day</button>
+        <button type="button" class="btn btn-default" onclick="MYTIMESHEET.timeSaveButton()" data-dismiss="modal">Close</button>
       </div>
     </div>
 
@@ -155,12 +155,16 @@
       	<b>Please clock your time below<br/><br/></b>
         <table>
         	<tr>
-        		<td width="100px" colspan="1">Category</td>
+        		<td width="100px" colspan="1">Please choose type of activity</td>
         		<td width="375px" colspan="3">
         			<select id="timeType">
         				<option value="Regular" selected="selected">Regular</option>
         				<option value="Overtime">Overtime</option>
         				<option value="Other">Other</option>
+        				<option value="Vacation">Vacation</option>
+        				<option value="Holiday">Holiday</option>
+        				<option value="Sick">Sick</option>
+        				<option value="Unpaid Leave">Unpaid Leave</option> 
         			</select>
         		</td> 
         	</tr>
@@ -168,6 +172,18 @@
         		<td colspan="4">&nbsp;</td>
         	</tr>
         	<tr>
+        		<td width="100px" colspan="1">Full-day or time-based?</td>
+        		<td width="375px" colspan="3">
+        			<select id="fulldayOrTimebased" onchange="MYTIMESHEET.fulldayOrTimebasedChanged()">
+        				<option value="fullday" selected="selected">Full-day</option>
+        				<option value="timebased">Time-based</option> 
+        			</select>
+        		</td> 
+        	</tr>
+        	<tr id="timeSpaceSection" style="display: none;">
+        		<td colspan="4">&nbsp;</td>
+        	</tr>
+        	<tr id="timeSection" style="display: none;">
         		<td>Start Time</td>
         		<td><input id="startTime" style="height: 30px; width: 100px" />&nbsp;&nbsp;</td>
         		<td>Finish Time</td>
@@ -185,7 +201,7 @@
         </table>
       </div>
       <div class="modal-footer">
-      	<button type="button" class="btn btn-default" id="timeSaveButton">Save</button>
+      	<button type="button" class="btn btn-default" onclick="MYTIMESHEET.timeSaveButton()" id="timeSaveButton">Save</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
       </div>
     </div>

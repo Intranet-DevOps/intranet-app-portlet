@@ -34,27 +34,7 @@ AUI().ready('aui-module', 'array-extras', function(A){
 	 	$('#other').val(MYTIMESHEET.timesheet.other); 
 	 	$('#remarks').val(MYTIMESHEET.timesheet.remarks);
 	})
-
-	$('#viewButton').on('click', function (e) {   
-		MYTIMESHEET.view();
-	}) 
-	$('#saveButton').on('click', function (e) {   
-		INTRANETLIB.showDialog('Submit Confirmation', 'Are you sure you want to save this timesheet?', function() {
-			console.log("save confirm...");
-			MYTIMESHEET.saveTimesheet();
-		}, function() {
-			console.log("save not confirm...");
-		});  
-	}) 
-	
-	$('#timeSaveButton').on('click', function (e) {   
-		INTRANETLIB.showDialog('Submit Confirmation', 'Are you sure you want to submit this time-clock?', function() {
-			console.log("save confirm...");
-			MYTIMESHEET.saveTimeClock();
-		}, function() {
-			console.log("save not confirm...");
-		});  
-	}) 
+ 
 	
 	$('#deleteButton').on('click', function (e) {   
 		MYTIMESHEET.deleteRow();
@@ -65,7 +45,7 @@ AUI().ready('aui-module', 'array-extras', function(A){
 
 
 
-// ------------
+// Controller ------------
 
 function MyTimeSheet() {
 	timesheetId = -1;
@@ -85,6 +65,75 @@ MyTimeSheet.prototype.deleteRow = function() {
 		console.log("delete not confirm...");
 	});
 };
+
+MyTimeSheet.prototype.saveButton = function() {
+	INTRANETLIB.showDialog('Submit Confirmation', 'Are you sure you want to save this timesheet?', function() {
+		console.log("save confirm...");
+		MYTIMESHEET.saveTimesheet();
+	}, function() {
+		console.log("save not confirm...");
+	});  
+};
+
+MyTimeSheet.prototype.viewButton = function() {
+	MYTIMESHEET.view();
+};
+
+MyTimeSheet.prototype.timeSaveButton = function() {
+	INTRANETLIB.showDialog('Submit Confirmation', 'Are you sure you want to submit this time-clock?', function() {
+		console.log("save confirm...");
+		MYTIMESHEET.saveTimeClock();
+	}, function() {
+		console.log("save not confirm...");
+	});  
+};
+
+MyTimeSheet.prototype.deleteButton = function() {
+	MYTIMESHEET.deleteRow();
+}; 
+
+MyTimeSheet.prototype.viewButton = function() {
+	MYTIMESHEET.view();
+};
+
+MyTimeSheet.prototype.editRow = function(timesheetId) {
+	console.log("editRow " + timesheetId);
+	MYTIMESHEET.timesheetId = timesheetId; 
+	var timesheets = MYTIMESHEET.timesheets;
+	timesheets.forEach(function(item) {
+		if (item.timesheetId == timesheetId) {
+			MYTIMESHEET.timesheet = item; 
+			return;
+		}
+	});
+	$('#editDialog').modal('show');
+};
+
+MyTimeSheet.prototype.addTime = function(timesheetId) {
+	console.log("addTime " + timesheetId);
+	MYTIMESHEET.timesheetId = timesheetId; 
+	var timesheets = MYTIMESHEET.timesheets;
+	timesheets.forEach(function(item) {
+		if (item.timesheetId == timesheetId) {
+			MYTIMESHEET.timesheet = item; 
+			return;
+		}
+	});
+	$('#addTimeDialog').modal('show');
+};
+
+MyTimeSheet.prototype.fulldayOrTimebasedChanged = function(e) { 
+	var fulldayOrTimebased = $('#fulldayOrTimebased').val(); 
+	if (fulldayOrTimebased == 'fullday') {
+		$('#timeSpaceSection').hide();
+		$('#timeSection').hide();
+	} else {
+		$('#timeSpaceSection').show();
+		$('#timeSection').show();
+	}
+}  
+
+// Service ------------
 
 MyTimeSheet.prototype.deleteTimesheet = function() {
 	try {
@@ -189,33 +238,6 @@ MyTimeSheet.prototype.saveTimeClock = function() {
 	}
 };
 
-
-MyTimeSheet.prototype.editRow = function(timesheetId) {
-	console.log("editRow " + timesheetId);
-	MYTIMESHEET.timesheetId = timesheetId; 
-	var timesheets = MYTIMESHEET.timesheets;
-	timesheets.forEach(function(item) {
-		if (item.timesheetId == timesheetId) {
-			MYTIMESHEET.timesheet = item; 
-			return;
-		}
-	});
-	$('#editDialog').modal('show');
-};
-
-MyTimeSheet.prototype.addTime = function(timesheetId) {
-	console.log("addTime " + timesheetId);
-	MYTIMESHEET.timesheetId = timesheetId; 
-	var timesheets = MYTIMESHEET.timesheets;
-	timesheets.forEach(function(item) {
-		if (item.timesheetId == timesheetId) {
-			MYTIMESHEET.timesheet = item; 
-			return;
-		}
-	});
-	$('#addTimeDialog').modal('show');
-};
-
 MyTimeSheet.prototype.view = function() {
 	
 	var userId = INTRANETLIB.getUserId();
@@ -255,9 +277,8 @@ MyTimeSheet.prototype.view = function() {
 						"<td>" + total + "</td>" +
 						"<td>" + item.status + "</td>" +
 						"<td>" +
-						'	<button type="button" class="btn btn-default" style="display: none;" data-toggle="modal" onclick="MYTIMESHEET.deleteRow(\'' + item.timesheetId + '\')"><i class="fa fa-trash"></i></button>' +
-						'	<button type="button" class="btn btn-default" data-toggle="modal" onclick="MYTIMESHEET.editRow(\'' + item.timesheetId + '\')"><i class="fa fa-edit"></i></button>' +
-						'	<button type="button" class="btn btn-default" data-toggle="modal" onclick="MYTIMESHEET.addTime(\'' + item.timesheetId + '\')"><i class="fa fa-hourglass-half"></i></button>' +
+						'	<button type="button" title="View Summary" class="btn btn-default" data-toggle="modal" onclick="MYTIMESHEET.editRow(\'' + item.timesheetId + '\')"><i class="fa fa-eye"></i></button>' +
+						'	<button type="button" title="Add timesheet" class="btn btn-default" data-toggle="modal" onclick="MYTIMESHEET.addTime(\'' + item.timesheetId + '\')"><i class="fa fa-plus"></i></button>' +
 						"</td>" +
 						"</tr>");
 			$("#dataTable > tbody").append(row);
