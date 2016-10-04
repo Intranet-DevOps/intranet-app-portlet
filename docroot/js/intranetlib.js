@@ -109,7 +109,8 @@ IntranetLib.prototype.getFullName = function() {
 }
 
 IntranetLib.prototype.showLoading = function() {
-	pleaseWaitDiv.modal();
+	$('#pleaseWaitDialog').modal('show');
+	
 }
 
 IntranetLib.prototype.showMessage = function(title, message) {
@@ -119,7 +120,7 @@ IntranetLib.prototype.showMessage = function(title, message) {
     
     $('#commonConfirm').on('shown.bs.modal', function (e) {
 		$('#commonConfirm').css('zIndex', 100000);
-	})
+	})  
 	
 }
 
@@ -144,8 +145,9 @@ IntranetLib.prototype.showDialog = function(title, message, yesCallBackFn, noCal
 }
 
 IntranetLib.prototype.hideLoading = function() {
-	pleaseWaitDiv.modal('hide');
-}
-var pleaseWaitDiv = $('<div class="modal hide" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false"><div class="modal-header"><h1>Processing...</h1></div><div class="modal-body"><div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div></div></div>');
+	$('#pleaseWaitDialog').modal('hide');
+} 
 
 var INTRANETLIB = new IntranetLib();
+ 
+

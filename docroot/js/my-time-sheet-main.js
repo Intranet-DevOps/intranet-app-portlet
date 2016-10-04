@@ -33,6 +33,27 @@ AUI().ready('aui-module', 'array-extras', function(A){
 	 	$('#unpaid').val(MYTIMESHEET.timesheet.unpaid);
 	 	$('#other').val(MYTIMESHEET.timesheet.other); 
 	 	$('#remarks').val(MYTIMESHEET.timesheet.remarks);
+	 	 
+	 	INTRANETLIB.showLoading();
+	 	MYTIMESHEET.getTimeSheetDetails(function(obj) {
+	 		$("#timeDetails > table").remove();
+	 		console.log("in gettimedetails: ", obj);
+	 		if (obj != null) {
+	 			$("#timeDetails").append("<table>");
+		 		
+		 		obj.forEach(function(item) {
+		 			var row = $(
+							"<tr>" +
+							"<td>" + item.clockInTime + "-" + item.clockOutTime + " " + item.type + " (" + item.fulldayOrTimeBased + ")</td>" +
+							"</tr>");
+			 		$("#dataTable > tbody").append(row);
+		 		})
+		 		
+		 		$("#timeDetails").append("<table>");
+	 		}
+	 		
+	 		INTRANETLIB.hideLoading();
+	 	})
 	})
  
 	
@@ -40,7 +61,7 @@ AUI().ready('aui-module', 'array-extras', function(A){
 		MYTIMESHEET.deleteRow();
 	})  
 	
-	MYTIMESHEET.view();
+	MYTIMESHEET.getTimeSheets();
 });
 
 
@@ -76,7 +97,7 @@ MyTimeSheet.prototype.saveButton = function() {
 };
 
 MyTimeSheet.prototype.viewButton = function() {
-	MYTIMESHEET.view();
+	MYTIMESHEET.getTimeSheets();
 };
 
 MyTimeSheet.prototype.timeSaveButton = function() {
@@ -93,11 +114,10 @@ MyTimeSheet.prototype.deleteButton = function() {
 }; 
 
 MyTimeSheet.prototype.viewButton = function() {
-	MYTIMESHEET.view();
+	MYTIMESHEET.getTimeSheets();
 };
 
-MyTimeSheet.prototype.editRow = function(timesheetId) {
-	console.log("editRow " + timesheetId);
+MyTimeSheet.prototype.viewRow = function(timesheetId) { 
 	MYTIMESHEET.timesheetId = timesheetId; 
 	var timesheets = MYTIMESHEET.timesheets;
 	timesheets.forEach(function(item) {
@@ -123,15 +143,15 @@ MyTimeSheet.prototype.addTime = function(timesheetId) {
 };
 
 MyTimeSheet.prototype.fulldayOrTimebasedChanged = function(e) { 
-	var fulldayOrTimebased = $('#fulldayOrTimebased').val(); 
-	if (fulldayOrTimebased == 'fullday') {
+	var fulldayOrTimeBased = $('#fulldayOrTimeBased').val(); 
+	if (fulldayOrTimeBased == 'fullday') {
 		$('#timeSpaceSection').hide();
 		$('#timeSection').hide();
 	} else {
-		$('#timeSpaceSection').show();
+		$('#timeSpaceSection').show();  
 		$('#timeSection').show();
 	}
-}  
+} 
 
 // Service ------------
 
@@ -139,7 +159,7 @@ MyTimeSheet.prototype.deleteTimesheet = function() {
 	try {
 		
 		Liferay.Service(
-		  '/intranet-app-services-portlet.timesheet/delete-time-sheet',
+		  '/intranet-timesheet-service-portlet.timesheet/delete-time-sheet',
 		  {
 		    timesheetId: MYTIMESHEET.timesheetId,
 		    actor: INTRANETLIB.getUserId()
@@ -149,14 +169,14 @@ MyTimeSheet.prototype.deleteTimesheet = function() {
 		    $('#deleteConfirmation').modal('hide');
 		    $('#editDialog').modal('hide');
 		    INTRANETLIB.showMessage("Delete Confirmation", "Your timesheet has been successfully removed");
-		    MYTIMESHEET.view();
+		    MYTIMESHEET.getTimeSheets();
 		  }
 		);
 		
 		
 	} catch (e) {
 		alert("Error - " + e);
-		MYTIMESHEET.view();
+		MYTIMESHEET.getTimeSheets();
 	}
 };
 
@@ -172,7 +192,7 @@ MyTimeSheet.prototype.saveTimesheet = function() {
 		MYTIMESHEET.timesheet.other = parseInt($('#other').val());
 		MYTIMESHEET.timesheet.remarks = $('#remarks').val();
 		Liferay.Service(
-		  '/intranet-app-services-portlet.timesheet/update-time-sheet',
+		  '/intranet-timesheet-service-portlet.timesheet/update-time-sheet',
 		  {
 		    timesheetId: MYTIMESHEET.timesheet.timesheetId,
 		    employeeScreenName: INTRANETLIB.getUserId(),
@@ -193,14 +213,14 @@ MyTimeSheet.prototype.saveTimesheet = function() {
 		    console.log(obj);
 		    $('#editDialog').modal('hide');
 		    INTRANETLIB.showMessage("Update Confirmation", "Your timesheet has been successfully saved");
-		    MYTIMESHEET.view();
+		    MYTIMESHEET.getTimeSheets();
 		  }
 		);
 		
 		
 	} catch (e) {
 		alert("Error - " + e);
-		MYTIMESHEET.view();
+		MYTIMESHEET.getTimeSheets();
 	}
 };
 
@@ -209,10 +229,18 @@ MyTimeSheet.prototype.saveTimeClock = function() {
 	try {
 		var clockInTime = $('#startTime').val();
 		var clockOutTime = $('#finishTime').val();
+		console.log("clockInTime: " + clockInTime + ", clockOutTime: " + clockOutTime); 
+		var fulldayOrTimeBased = $('#fulldayOrTimeBased').val(); 
+		console.log('fulldayOrTimeBased: ' + fulldayOrTimeBased);
+		if (fulldayOrTimeBased == 'fullday') {
+			clockInTime = '09:00';
+			clockOutTime = '18:00';
+		}  
+		console.log("clockInTime: " + clockInTime + ", clockOutTime: " + clockOutTime + ", fulldayOrTimeBased: " + fulldayOrTimeBased);
 		var type = $('#timeType').val();
 		var remarks = $('#timeRemarks').val();
 		Liferay.Service(
-		  '/intranet-app-services-portlet.timesheet/add-timesheet-details',
+		  '/intranet-timesheet-service-portlet.timesheet/add-timesheet-details',
 		  {
 		    timesheetId: MYTIMESHEET.timesheet.timesheetId,
 		    logDate: MYTIMESHEET.timesheet.logDate,
@@ -220,25 +248,44 @@ MyTimeSheet.prototype.saveTimeClock = function() {
 		    clockOutTime: clockOutTime,
 		    type: type,
 		    remarks: remarks,
+		    fulldayOrTimeBased: fulldayOrTimeBased,
 		    actor: INTRANETLIB.getUserId()
 		  },
-		  function(obj) {
-		    console.log(obj);
+		  function(obj) { 
 		    $('#editDialog').modal('hide');
 		    $('#addTimeDialog').modal('hide');
 		    INTRANETLIB.showMessage("Update Confirmation", "Your time-clock has been successfully saved");
-		    MYTIMESHEET.view();
+		    MYTIMESHEET.getTimeSheets();
 		  }
 		);
 		
 		
 	} catch (e) {
+		console.log(e);
 		alert("Error - " + e);
-		MYTIMESHEET.view();
+		MYTIMESHEET.getTimeSheets();
 	}
 };
 
-MyTimeSheet.prototype.view = function() {
+MyTimeSheet.prototype.getTimeSheetDetails = function(getTimeSheetDetailsCallbackFn) {
+	
+	var userId = INTRANETLIB.getUserId();
+	console.log("Get timesheet details, userId: " + userId);
+	
+	Liferay.Service(
+	  '/intranet-timesheet-service-portlet.timesheet/get-timesheet-details',
+	  {
+		timesheetId: MYTIMESHEET.timesheetId, 
+	    actor: userId
+	  },
+	  function(obj) {
+		  getTimeSheetDetailsCallbackFn(obj);
+	  }
+	);
+}
+
+
+MyTimeSheet.prototype.getTimeSheets = function() {
 	
 	var userId = INTRANETLIB.getUserId();
 	var month = $('#months').val();
@@ -249,7 +296,7 @@ MyTimeSheet.prototype.view = function() {
 	
 	INTRANETLIB.showLoading();
 	Liferay.Service(
-	  '/intranet-app-services-portlet.timesheet/find-timesheets-by-user',
+	  '/intranet-timesheet-service-portlet.timesheet/find-timesheets-by-user',
 	  {
 	    startDate: begin,
 	    endDate: end,
@@ -277,7 +324,7 @@ MyTimeSheet.prototype.view = function() {
 						"<td>" + total + "</td>" +
 						"<td>" + item.status + "</td>" +
 						"<td>" +
-						'	<button type="button" title="View Summary" class="btn btn-default" data-toggle="modal" onclick="MYTIMESHEET.editRow(\'' + item.timesheetId + '\')"><i class="fa fa-eye"></i></button>' +
+						'	<button type="button" title="View Summary" class="btn btn-default" data-toggle="modal" onclick="MYTIMESHEET.viewRow(\'' + item.timesheetId + '\')"><i class="fa fa-eye"></i></button>' +
 						'	<button type="button" title="Add timesheet" class="btn btn-default" data-toggle="modal" onclick="MYTIMESHEET.addTime(\'' + item.timesheetId + '\')"><i class="fa fa-plus"></i></button>' +
 						"</td>" +
 						"</tr>");
@@ -289,8 +336,6 @@ MyTimeSheet.prototype.view = function() {
 	  }
 	);
 }
-
-
 
 $(function () {
     //Initialize Select2 Elements

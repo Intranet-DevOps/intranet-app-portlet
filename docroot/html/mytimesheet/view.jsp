@@ -1,6 +1,6 @@
 <%@page import="java.util.Date"%>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
-<%@include file="/html/inc/commonlib.jsp"%>
+<%@include file="/html/inc/commonlib.jsp"%> 
 
 <portlet:defineObjects />
 
@@ -33,8 +33,8 @@
 	           Month <select style="width: 120px" id="months" class="form-control select2"> 
 	           </select> 
 	           
-	           <button type="button" id="viewButton" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;View</button>
-	           
+	           <button onclick="MYTIMESHEET.view()" type="button" id="viewButton" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;View</button>
+	          
 	       </div>
 	     </div>
 	     <!-- /.box-header -->  
@@ -124,22 +124,25 @@
         		<td colspan="4">Remarks</td>
         	</tr>
         	<tr>
+        		<td colspan="4">&nbsp;</td>
+        	</tr>
+        	<tr>
+        		<td colspan="4" id="timeDetails"></td>
+        	</tr>
+        	<tr>
         		<td colspan="4"><textarea id="remarks" style="width: 450px" rows="2" cols="300"></textarea></td>
         	</tr>
         </table>
       </div>
       <div class="modal-footer">
       	<button type="button" class="btn btn-default" onclick="MYTIMESHEET.saveButton()"  id="saveButton">Update Remarks</button>
-      	<button type="button" class="btn btn-default" onclick="MYTIMESHEET.deleteButton()" id="deleteButton">Reset Day</button>
-        <button type="button" class="btn btn-default" onclick="MYTIMESHEET.timeSaveButton()" data-dismiss="modal">Close</button>
+      	<button type="button" class="btn btn-default" onclick="MYTIMESHEET.deleteButton()" id="deleteButton">Reset Timesheet</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
 
   </div>
 </div> 
- 
- 
- 
  
 <!-- Add Time Modal -->
 <div id="addTimeDialog" class="modal fade paraModal" style="bottom: auto; width: 600px" role="dialog">
@@ -174,7 +177,7 @@
         	<tr>
         		<td width="100px" colspan="1">Full-day or time-based?</td>
         		<td width="375px" colspan="3">
-        			<select id="fulldayOrTimebased" onchange="MYTIMESHEET.fulldayOrTimebasedChanged()">
+        			<select id="fulldayOrTimeBased" onchange="MYTIMESHEET.fulldayOrTimebasedChanged()">
         				<option value="fullday" selected="selected">Full-day</option>
         				<option value="timebased">Time-based</option> 
         			</select>
@@ -193,7 +196,7 @@
         		<td colspan="4">&nbsp;</td>
         	</tr>
         	<tr>
-        		<td colspan="4">Remarks</td>
+        		<td colspan="4">Remarks</td>  
         	</tr>
         	<tr>
         		<td colspan="4"><textarea id="timeRemarks" style="width: 450px" rows="2" cols="300"></textarea></td>
@@ -202,13 +205,12 @@
       </div>
       <div class="modal-footer">
       	<button type="button" class="btn btn-default" onclick="MYTIMESHEET.timeSaveButton()" id="timeSaveButton">Save</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
 
   </div>
 </div> 
- 
 
 <script src="<%=request.getContextPath()%>/js/intranetlib.js?<%=new Date().getTime()%>" type="text/javascript"></script>
 <script src="<%=request.getContextPath()%>/js/my-time-sheet-main.js?<%=new Date().getTime()%>" type="text/javascript"></script>

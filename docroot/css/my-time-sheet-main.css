@@ -1,9 +1,13 @@
 .paraModal {
 	bottom: auto; 
-	width: 600px
+	width: 600px; 
+}
+
+.commonParaModal {
+	padding-left: 15px;
 }
 
 .paraModalDialog {
 	margin-top: 0px; 
 	margin-bottom: 0px;
-}
+}    

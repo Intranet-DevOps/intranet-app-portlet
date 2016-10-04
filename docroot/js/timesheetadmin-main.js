@@ -114,7 +114,7 @@ TimesheetAdmin.prototype.deleteTimesheet = function() {
 	try {
 		
 		Liferay.Service(
-		  '/intranet-app-services-portlet.timesheet/delete-time-sheet',
+		  '/intranet-timesheet-service-portlet.timesheet/delete-time-sheet',
 		  {
 		    timesheetId: TIMESHEETADMIN.timesheetId,
 		    actor: INTRANETLIB.getUserId()
@@ -140,7 +140,7 @@ TimesheetAdmin.prototype.approveTimesheet = function() {
 	try {
 		
 		Liferay.Service(
-		  '/intranet-app-services-portlet.timesheet/approve-time-sheet',
+		  '/intranet-timesheet-service-portlet.timesheet/approve-time-sheet',
 		  {
 		    timesheetId: TIMESHEETADMIN.timesheetId,
 		    actor: INTRANETLIB.getUserId()
@@ -166,7 +166,7 @@ TimesheetAdmin.prototype.returnTimesheet = function() {
 	try {
 		
 		Liferay.Service(
-		  '/intranet-app-services-portlet.timesheet/reject-time-sheet',
+		  '/intranet-timesheet-service-portlet.timesheet/reject-time-sheet',
 		  {
 		    timesheetId: TIMESHEETADMIN.timesheetId,
 		    comment: '-',
@@ -200,7 +200,7 @@ TimesheetAdmin.prototype.saveTimesheet = function() {
 		TIMESHEETADMIN.timesheet.other = parseInt($('#other').val());
 		TIMESHEETADMIN.timesheet.remarks = $('#remarks').val();
 		Liferay.Service(
-		  '/intranet-app-services-portlet.timesheet/update-time-sheet',
+		  '/intranet-timesheet-service-portlet.timesheet/update-time-sheet',
 		  {
 		    timesheetId: TIMESHEETADMIN.timesheet.timesheetId,
 		    employeeScreenName: TIMESHEETADMIN.timesheet.employeeScreenName,
@@ -260,7 +260,7 @@ TimesheetAdmin.prototype.view = function() {
 	
 	INTRANETLIB.showLoading();
 	Liferay.Service(
-	  '/intranet-app-services-portlet.timesheet/find-timesheets-by-user',
+	  '/intranet-timesheet-service-portlet.timesheet/find-timesheets-by-user',
 	  {
 	    startDate: begin,
 	    endDate: end,
