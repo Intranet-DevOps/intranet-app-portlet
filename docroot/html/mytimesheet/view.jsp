@@ -33,7 +33,7 @@
 	           Month <select style="width: 120px" id="months" class="form-control select2"> 
 	           </select> 
 	           
-	           <button onclick="MYTIMESHEET.view()" type="button" id="viewButton" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;View</button>
+	           <button onclick="MYTIMESHEET.viewButton()" type="button" id="viewButton" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;View</button>
 	          
 	       </div>
 	     </div>
@@ -124,14 +124,18 @@
         		<td colspan="4">Remarks</td>
         	</tr>
         	<tr>
+        		<td colspan="4"><textarea id="remarks" style="width: 450px" rows="2" cols="300"></textarea></td>
+        	</tr>
+        	<tr>
         		<td colspan="4">&nbsp;</td>
+        	</tr>
+        	<tr>
+        		<td colspan="4">Details</td>
         	</tr>
         	<tr>
         		<td colspan="4" id="timeDetails"></td>
         	</tr>
-        	<tr>
-        		<td colspan="4"><textarea id="remarks" style="width: 450px" rows="2" cols="300"></textarea></td>
-        	</tr>
+        	
         </table>
       </div>
       <div class="modal-footer">

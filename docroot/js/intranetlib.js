@@ -57,6 +57,16 @@ IntranetLib.prototype.formatDisplayDate = function(timestamp) {
     return day + ' ' + monthNames[monthIndex] + ' ' + year;
 } 
 
+
+IntranetLib.prototype.formatDisplayTime = function(timestamp) { 
+
+    var date = new Date(timestamp);
+    var hour = date.getHours(); 
+    var minute = date.getMinutes();
+    
+    return hour + ':' + minute;
+} 
+
 IntranetLib.prototype.getBeginningOfMonthTimestamp = function(year, month) { 
 	var d = new Date(year, month, 1);
 	return d.getTime();

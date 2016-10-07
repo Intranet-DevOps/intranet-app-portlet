@@ -34,25 +34,33 @@ AUI().ready('aui-module', 'array-extras', function(A){
 	 	$('#other').val(MYTIMESHEET.timesheet.other); 
 	 	$('#remarks').val(MYTIMESHEET.timesheet.remarks);
 	 	 
-	 	INTRANETLIB.showLoading();
+	 	//INTRANETLIB.showLoading();
+	 	
 	 	MYTIMESHEET.getTimeSheetDetails(function(obj) {
 	 		$("#timeDetails > table").remove();
-	 		console.log("in gettimedetails: ", obj);
+	 		console.log("in gettimedetails: ", obj); 
 	 		if (obj != null) {
-	 			$("#timeDetails").append("<table>");
-		 		
+	 			
+	 			$("#timeDetails").append("<table id='timeDetailsTable'>");
+	 			$("#timeDetailsTable").append("<tbody>");
+	 			 
 		 		obj.forEach(function(item) {
+		 			var fulldayOrTimeBased = item.fulldayOrTimeBased; 
+		 			var clockInTime = INTRANETLIB.formatDisplayTime(item.clockInTime);
+		 			var clockOutTime = INTRANETLIB.formatDisplayTime(item.clockOutTime);
 		 			var row = $(
 							"<tr>" +
-							"<td>" + item.clockInTime + "-" + item.clockOutTime + " " + item.type + " (" + item.fulldayOrTimeBased + ")</td>" +
+							"<td>" + item.type + ", from " + clockInTime + " to " + clockOutTime + " (" + fulldayOrTimeBased.toUpperCase() + ")</td>" +
 							"</tr>");
-			 		$("#dataTable > tbody").append(row);
+			 		$("#timeDetailsTable").append(row);
 		 		})
 		 		
+	 			$("#timeDetailsTable").append("</tbody>");
 		 		$("#timeDetails").append("<table>");
+		 		
 	 		}
-	 		
-	 		INTRANETLIB.hideLoading();
+	 
+	 		//INTRANETLIB.hideLoading();
 	 	})
 	})
  
@@ -112,10 +120,6 @@ MyTimeSheet.prototype.timeSaveButton = function() {
 MyTimeSheet.prototype.deleteButton = function() {
 	MYTIMESHEET.deleteRow();
 }; 
-
-MyTimeSheet.prototype.viewButton = function() {
-	MYTIMESHEET.getTimeSheets();
-};
 
 MyTimeSheet.prototype.viewRow = function(timesheetId) { 
 	MYTIMESHEET.timesheetId = timesheetId; 
