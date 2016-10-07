@@ -69,7 +69,7 @@
 	  </div>
 </div>
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#submitConfirmation"><i class="fa fa-send"></i> Submit</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" onclick="MYTIMESHEET.submitButton()"><i class="fa fa-send"></i> Submit</button>
 
 <!-- Edit Timesheet Modal -->
 <div id="editDialog" class="modal fade paraModal" style="bottom: auto; width: 600px" role="dialog">

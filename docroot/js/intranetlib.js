@@ -1,6 +1,17 @@
 function IntranetLib() {
 }
 
+IntranetLib.prototype.checkServiceError = function(obj) {
+	try {
+		if (obj.exception != '') {
+			this.showMessage("Error", obj.message);
+			return true;
+		}
+	} catch (e) {}
+	
+	return false;
+}
+
 IntranetLib.prototype.getYears = function() {
 	var years = [];
 	years.push({'label':'2015', 'value' : '2015' });
@@ -119,8 +130,7 @@ IntranetLib.prototype.getFullName = function() {
 }
 
 IntranetLib.prototype.showLoading = function() {
-	$('#pleaseWaitDialog').modal('show');
-	
+	$('#pleaseWaitDialog').modal('show'); 
 }
 
 IntranetLib.prototype.showMessage = function(title, message) {
@@ -130,6 +140,9 @@ IntranetLib.prototype.showMessage = function(title, message) {
     
     $('#commonConfirm').on('shown.bs.modal', function (e) {
 		$('#commonConfirm').css('zIndex', 100000);
+	})  
+	$('#commonConfirm').on('hidden.bs.modal', function (e) {
+		$("body").css({"padding-right":"0px"});
 	})  
 	
 }
@@ -152,10 +165,13 @@ IntranetLib.prototype.showDialog = function(title, message, yesCallBackFn, noCal
 	$('#commonDialog').on('shown.bs.modal', function (e) {
 		$('#commonDialog').css('zIndex', 100000);
 	})
+	$('#commonDialog').on('hidden.bs.modal', function (e) {
+		$("body").css({"padding-right":"0px"});
+	})  
 }
 
 IntranetLib.prototype.hideLoading = function() {
-	$('#pleaseWaitDialog').modal('hide');
+	$('#pleaseWaitDialog').modal('hide'); 
 } 
 
 var INTRANETLIB = new IntranetLib();
