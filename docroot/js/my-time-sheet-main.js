@@ -47,11 +47,22 @@ AUI().ready('aui-module', 'array-extras', function(A){
 	 	$('#holiday').val(MYTIMESHEET.timesheet.holiday);
 	 	$('#unpaid').val(MYTIMESHEET.timesheet.unpaid);
 	 	$('#other').val(MYTIMESHEET.timesheet.other); 
-	 	$('#remarks').val(MYTIMESHEET.timesheet.remarks);
-	 	 
-	 	//INTRANETLIB.showLoading();
+	 	$('#remarks').val(MYTIMESHEET.timesheet.remarks); 
+	 	
+	 	if (MYTIMESHEET.timesheet.isEditable) {
+	 		$("#remarks").prop( "disabled", false ); 
+	 		$('#saveButton').css("display", "");
+	 		$('#deleteButton').css("display", "");
+	 	} else {
+	 		$("#remarks").prop( "disabled", true ); 
+	 		$('#saveButton').css("display", "none");
+	 		$('#deleteButton').css("display", "none");
+	 	}
 	 	
 	 	MYTIMESHEET.getTimeSheetDetails(function(obj) {
+	 		
+	 		
+	 		
 	 		$("#timeDetails > table").remove();
 	 		console.log("in gettimedetails: ", obj); 
 	 		if (obj != null) {
@@ -73,9 +84,7 @@ AUI().ready('aui-module', 'array-extras', function(A){
 	 			$("#timeDetailsTable").append("</tbody>");
 		 		$("#timeDetails").append("<table>");
 		 		
-	 		}
-	 
-	 		//INTRANETLIB.hideLoading();
+	 		} 
 	 	})
 	})
  
@@ -87,7 +96,7 @@ AUI().ready('aui-module', 'array-extras', function(A){
 		MYTIMESHEET.deleteRow();
 	})  
 	
-	MYTIMESHEET.getTimeSheets();
+	MYTIMESHEET.viewButton();
 });
 
 
@@ -123,7 +132,21 @@ MyTimeSheet.prototype.saveButton = function() {
 };
 
 MyTimeSheet.prototype.viewButton = function() {
-	MYTIMESHEET.getTimeSheets();
+	   
+	MYTIMESHEET.getTimeSheetMonth(function(timesheetMonth) {
+		var isEditable = true;
+		console.log("isEditable: " + isEditable);
+		if (timesheetMonth != null && timesheetMonth.length > 0) {
+			isEditable = false;
+		}
+		MYTIMESHEET.getTimeSheets(isEditable);
+		if (isEditable) {
+			$("#submitButton").css("display", "");
+		} else {
+			$("#submitButton").css("display", "none");
+		}
+	})
+	
 };
 
 MyTimeSheet.prototype.timeSaveButton = function() {
@@ -222,7 +245,7 @@ MyTimeSheet.prototype.submitTimesheet = function() {
 		Liferay.Service(
 		  '/intranet-timesheet-service-portlet.timesheet/submit-month',
 		  {
-		    yaer: year,
+			year: year,
 		    month: month,
 		    userId: INTRANETLIB.getUserId(),
 		    actor: INTRANETLIB.getUserId()
@@ -339,6 +362,27 @@ MyTimeSheet.prototype.saveTimeClock = function() {
 	}
 };
 
+MyTimeSheet.prototype.getTimeSheetMonth = function(getTimeSheetMonthCallBackFn) {
+	
+	var userId = INTRANETLIB.getUserId();
+	console.log("Get timesheet month, userId: " + userId);
+	var month = $('#months').val();
+	var year = $('#years').val();
+	Liferay.Service(
+	  '/intranet-timesheet-service-portlet.timesheet/get-timesheet-month',
+	  {
+		  year: year,
+		  month: month,
+		  userId: INTRANETLIB.getUserId(),
+		  actor: INTRANETLIB.getUserId()
+	  },
+	  function(obj, err) {
+		  getTimeSheetMonthCallBackFn(obj);
+	  }
+	);
+}
+
+
 MyTimeSheet.prototype.getTimeSheetDetails = function(getTimeSheetDetailsCallbackFn) {
 	
 	var userId = INTRANETLIB.getUserId();
@@ -357,7 +401,7 @@ MyTimeSheet.prototype.getTimeSheetDetails = function(getTimeSheetDetailsCallback
 }
 
 
-MyTimeSheet.prototype.getTimeSheets = function() {
+MyTimeSheet.prototype.getTimeSheets = function(isEditable) {
 	
 	var userId = INTRANETLIB.getUserId();
 	var month = $('#months').val();
@@ -379,11 +423,12 @@ MyTimeSheet.prototype.getTimeSheets = function() {
 		  $("#dataTable > tbody > tr").remove();
 		  MYTIMESHEET.timesheets = [];
 		  obj.forEach(function(item) {
+			 item.isEditable = isEditable;
 			 MYTIMESHEET.timesheets.push(item);
 			 var logDate = INTRANETLIB.formatDisplayDate(item.logDate);
 			 var dayName = INTRANETLIB.getDayStringOfWeek(item.logDate);
 			 var total = item.regular + item.overtime + item.sick + item.vacation + item.holiday + item.unpaid + item.other;
-			 var row = $(
+			 var rowString =  
 						"<tr>" +
 						"<td>" + dayName + "</td><td>" + logDate + "</td>" +
 						"<td>" + item.regular + "</td>" +
@@ -396,12 +441,22 @@ MyTimeSheet.prototype.getTimeSheets = function() {
 						"<td>" + total + "</td>" +
 						"<td>" + item.status + "</td>" +
 						"<td>" +
-						'	<button type="button" title="View Summary" class="btn btn-default" data-toggle="modal" onclick="MYTIMESHEET.viewRow(\'' + item.timesheetId + '\')"><i class="fa fa-eye"></i></button>' +
-						'	<button type="button" title="Add timesheet" class="btn btn-default" data-toggle="modal" onclick="MYTIMESHEET.addTime(\'' + item.timesheetId + '\')"><i class="fa fa-plus"></i></button>' +
-						"</td>" +
-						"</tr>");
+						'	<button type="button" title="View Summary" class="btn btn-default" data-toggle="modal" onclick="MYTIMESHEET.viewRow(\'' + item.timesheetId + '\')"><i class="fa fa-eye"></i></button>'
+						 
+						
+			 if (isEditable) {
+				 rowString = rowString + 
+						 '	<button type="button" title="Add timesheet" class="btn btn-default" data-toggle="modal" onclick="MYTIMESHEET.addTime(\'' + item.timesheetId + '\')"><i class="fa fa-plus"></i></button>'
+	
+			 }  
+			 rowString = rowString +
+					"</td>" +
+					"</tr>"
+			 
+			 var row = $(rowString);
+			 
 			$("#dataTable > tbody").append(row);
-		 });
+		  });
 		  
 		  INTRANETLIB.hideLoading();
 		

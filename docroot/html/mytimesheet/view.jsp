@@ -69,7 +69,7 @@
 	  </div>
 </div>
 
-<button type="button" class="btn btn-primary" data-toggle="modal" onclick="MYTIMESHEET.submitButton()"><i class="fa fa-send"></i> Submit</button>
+<button type="button" class="btn btn-primary" id="submitButton" data-toggle="modal" onclick="MYTIMESHEET.submitButton()"><i class="fa fa-send"></i> Submit</button>
 
 <!-- Edit Timesheet Modal -->
 <div id="editDialog" class="modal fade paraModal" style="bottom: auto; width: 600px" role="dialog">
@@ -139,8 +139,8 @@
         </table>
       </div>
       <div class="modal-footer">
-      	<button type="button" class="btn btn-default" onclick="MYTIMESHEET.saveButton()"  id="saveButton">Update Remarks</button>
-      	<button type="button" class="btn btn-default" onclick="MYTIMESHEET.deleteButton()" id="deleteButton">Reset Timesheet</button>
+      	<button type="button" class="btn btn-default" onclick="MYTIMESHEET.saveButton()" style="display: none" id="saveButton">Update Remarks</button>
+      	<button type="button" class="btn btn-default" onclick="MYTIMESHEET.deleteButton()" style="display: none"  id="deleteButton">Reset Timesheet</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
