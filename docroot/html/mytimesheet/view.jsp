@@ -36,6 +36,8 @@
 	           
 	           <button onclick="TIMESHEETCONTROLLER.viewButton()" type="button" id="viewButton" class="btn btn-primary"><i class="fa fa-search"></i>&nbsp;View</button>
 	          
+	          	<span id="timesheetStatus" style="font-weight: bold;"> 
+	     		</span>
 	       </div>
 	     </div>
 	     <!-- /.box-header -->  
