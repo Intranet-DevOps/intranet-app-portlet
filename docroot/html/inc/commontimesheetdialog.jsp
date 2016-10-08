@@ -112,7 +112,7 @@
         	<tr>
         		<td width="100px" colspan="1">Full-day or time-based?</td>
         		<td width="375px" colspan="3">
-        			<select id="fulldayOrTimeBased" onchange="TIMESHEETCONTROLLER">
+        			<select id="fulldayOrTimeBased" onchange="TIMESHEETCONTROLLER.fulldayOrTimebasedChanged()">
         				<option value="fullday" selected="selected">Full-day</option>
         				<option value="timebased">Time-based</option> 
         			</select>
